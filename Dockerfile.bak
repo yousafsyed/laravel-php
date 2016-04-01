@@ -1,0 +1,21 @@
+FROM ubuntu:14.04
+
+MAINTAINER "Yousaf Syed" <mmesunny@gmail.com>
+
+RUN apt-get update -y && \
+    apt-get install -y nginx php5-fpm php5-cli php5-mcrypt git && \
+    php5enmod mcrypt && \
+    service php5-fpm restart
+
+# Nginx startup script
+ADD config/start-ngnix.sh /opt/bin/start-ngnix.sh
+RUN chmod u=rwx /opt/bin/start-ngnix.sh
+
+
+# PORTS
+EXPOSE 80
+EXPOSE 443
+
+WORKDIR /opt/bin
+ENTRYPOINT ["/opt/bin/start-ngnix.sh"]
+
